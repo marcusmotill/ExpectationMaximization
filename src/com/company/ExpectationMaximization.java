@@ -77,10 +77,10 @@ public class ExpectationMaximization extends JFrame {
         }
 
 
-        List<Integer> A = new ArrayList<>();
-        List<Integer> C = new ArrayList<>();
-        List<Integer> G = new ArrayList<>();
-        List<Integer> T = new ArrayList<>();
+        List<Double> A = new ArrayList<>();
+        List<Double> C = new ArrayList<>();
+        List<Double> G = new ArrayList<>();
+        List<Double> T = new ArrayList<>();
 
 
         List<char[]> seqs = new ArrayList<>();
@@ -97,10 +97,10 @@ public class ExpectationMaximization extends JFrame {
             int cCount = StringUtils.countMatches(col.toString(), "C");
             int gCount = StringUtils.countMatches(col.toString(), "G");
             int tCount = StringUtils.countMatches(col.toString(), "T");
-            A.add(aCount);
-            C.add(cCount);
-            G.add(gCount);
-            T.add(tCount);
+            A.add((double) aCount);
+            C.add((double) cCount);
+            G.add((double) gCount);
+            T.add((double) tCount);
         }
 
         System.out.println(A);
@@ -108,7 +108,45 @@ public class ExpectationMaximization extends JFrame {
         System.out.println(G);
         System.out.println(T);
 
+        A = getFrequency(A, seqs.size());
+        C = getFrequency(C, seqs.size());
+        G = getFrequency(G, seqs.size());
+        T = getFrequency(T, seqs.size());
 
+        System.out.println(A);
+        System.out.println(C);
+        System.out.println(G);
+        System.out.println(T);
+
+        A = getLogOdds(A);
+        C = getLogOdds(C);
+        G = getLogOdds(G);
+        T = getLogOdds(T);
+
+        System.out.println(A);
+        System.out.println(C);
+        System.out.println(G);
+        System.out.println(T);
+
+    }
+
+
+    private List<Double> getFrequency(List<Double> X, int seqs) {
+        ListIterator<Double> it = X.listIterator();
+        while (it.hasNext()) {
+            double value = it.next();
+            it.set(value / seqs);
+        }
+        return X;
+    }
+
+    private List<Double> getLogOdds(List<Double> X) {
+        ListIterator<Double> it = X.listIterator();
+        while (it.hasNext()) {
+            double value = it.next();
+            it.set(Math.log10(value) / Math.log10(2));
+        }
+        return X;
     }
 
     private void initView() {
